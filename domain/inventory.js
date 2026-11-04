@@ -48,6 +48,7 @@ export function createEvent(store, {title, description, date, venue }){
     title: title.trim(),
     description: description.trim(),
     date: date.trim(),
+    status: 'draft',
     venue: venue.trim()
 };
 
@@ -60,8 +61,6 @@ function getTier(store, tierId) {
   if (!tier) throw new DomainError('NOT_FOUND', 'Ticket tier not found');
   return tier;
 }
-
-
 
 export function addTiers(store, eventId, {tierRank, priceKobo, capacity}) {
     const event = store.events.get(eventId);
@@ -79,6 +78,21 @@ export function addTiers(store, eventId, {tierRank, priceKobo, capacity}) {
     event.tierIds.push(tier.Id);
     return tier;
 
+}
+
+export function publishEvnt(store, eventId){
+  const event = getEvent(store, eventId);
+  if(event.tierId === 0){
+    throw new DomainError('INVALID', 'Event Should Have At Least One Tier');
+  }
+  event.status = 'PUBLISHED';
+  return event;
+}
+
+export function listEventSummaries(store, { publishedOnly = true} = {}){
+  return [...store.events.values()]
+  .filter((event) => !publishedOnly || event.status === 'published')
+  .map((event) => summariseEvent(event, event.tierIds.map((id) => store.tier.get(id))));
 }
 
 export function seatsLeft(tier) {
