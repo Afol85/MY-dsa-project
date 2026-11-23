@@ -1,4 +1,4 @@
-import { mergeSort } from "../domain/sort.js";
+import { mergeSort } from "../src/domain/sort.js";
 
 console.log(mergeSort([8, 3, 5, 2, 10, 1]));
 

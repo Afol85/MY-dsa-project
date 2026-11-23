@@ -1,4 +1,4 @@
-import { searchEvents, filterEvents, sortEvents } from "../domain/eventSearches.js";
+import { searchEvents, filterEvents, sortEvents } from "../src/domain/eventSearches.js";
 
 const events = [{
     id: '001',
